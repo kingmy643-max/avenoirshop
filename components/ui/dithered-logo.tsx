@@ -399,6 +399,8 @@ export interface DitheredLogoProps {
   scale?: number;
   dotScale?: number;
   invert?: boolean;
+  /** Skip dithering: dots follow the logo shape exactly (best for solid logos). */
+  solid?: boolean;
   cornerRadius?: number;
   threshold?: number;
   contrast?: number;
@@ -417,6 +419,7 @@ export function DitheredLogo({
   scale = DEFAULTS.scale,
   dotScale = DEFAULTS.dotScale,
   invert = DEFAULTS.invert,
+  solid = false,
   cornerRadius = DEFAULTS.cornerRadius,
   threshold = DEFAULTS.threshold,
   contrast = DEFAULTS.contrast,
@@ -512,15 +515,24 @@ export function DitheredLogo({
         const processed = toGrayscaleGrid(img, gridSize, contrast, gamma, blur);
         const { width: gridW, height: gridH } = processed;
 
-        let positions = errorDiffusionDither(
-          processed.grayscale,
-          gridW,
-          gridH,
-          { threshold, serpentine, diffusionStrength },
-          processed.alpha,
-        );
+        let positions: Float32Array;
+        if (solid) {
+          const pts: number[] = [];
+          for (let y = 0; y < gridH; y++)
+            for (let x = 0; x < gridW; x++)
+              if (processed.alpha[y * gridW + x]! >= 128) pts.push(x, y);
+          positions = new Float32Array(pts);
+        } else {
+          positions = errorDiffusionDither(
+            processed.grayscale,
+            gridW,
+            gridH,
+            { threshold, serpentine, diffusionStrength },
+            processed.alpha,
+          );
+        }
 
-        if (invert) {
+        if (invert && !solid) {
           positions = applyMaskInversion(
             positions,
             gridW,
@@ -536,7 +548,7 @@ export function DitheredLogo({
         );
         const originX = Math.round((rect.width - gridW * scaleFactor) / 2);
         const originY = Math.round((rect.height - gridH * scaleFactor) / 2);
-        const responsiveDotScale = isMobile ? dotScale * 0.8 : dotScale;
+        const responsiveDotScale = isMobile && !solid ? dotScale * 0.8 : dotScale;
 
         systemRef.current = initParticles(
           positions,
@@ -555,6 +567,7 @@ export function DitheredLogo({
       scale,
       dotScale,
       invert,
+      solid,
       cornerRadius,
       threshold,
       contrast,
@@ -574,6 +587,7 @@ export function DitheredLogo({
       scale,
       dotScale,
       invert,
+      solid,
       cornerRadius,
       threshold,
       contrast,
@@ -593,6 +607,7 @@ export function DitheredLogo({
     scale,
     dotScale,
     invert,
+    solid,
     cornerRadius,
     threshold,
     contrast,
