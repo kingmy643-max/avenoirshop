@@ -10,7 +10,8 @@ Static Next.js site (no checkout). Orders happen in DM on Instagram / TikTok / W
 1. Push this folder to a GitHub repo.
 2. Cloudflare dashboard -> Workers & Pages -> Create -> Pages -> Connect to Git -> pick the repo.
 3. Build settings: Framework preset **Next.js (Static HTML Export)** · Build command `npm run build` · Output directory `out`.
-4. Environment variable: `NODE_VERSION` = `20`. Save and deploy.
+4. (After you get your own domain, replace avenoir.pages.dev in app/layout.tsx, public/robots.txt and public/sitemap.xml.)
+5. Environment variable: `NODE_VERSION` = `20`. Save and deploy.
 
 ## What to edit
 - `data/site.ts` — social links, brands, steps, FAQ, and **DRIVE_LINKS** (put each brand's Google Drive folder link; until then every brand opens the Linktree catalog).
