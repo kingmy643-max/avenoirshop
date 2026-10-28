@@ -28,7 +28,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   const idx = Math.max(0, NAV.findIndex((n) => (n.href === "/" ? path === "/" : path.startsWith(n.href))));
   return (
     <>
-      {fine && <TargetCursor cursorColor="#C9A24B" />}
+      {fine && <TargetCursor spinDuration={2} hideDefaultCursor parallaxOn targetSelector=".cursor-target, a, button, summary" />}
       <header className="sticky top-0 z-30 border-b border-border bg-black/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-3 sm:flex-row sm:justify-between sm:px-6">
           <a href="/" aria-label="Avenoir home" className="cursor-target"><img src="/logo-gold.svg" alt="Avenoir" className="h-9 w-auto sm:h-10" /></a>

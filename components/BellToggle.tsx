@@ -5,6 +5,7 @@ export default function BellToggle() {
   const [on, setOn] = useState(false);
   return (
     <button
+      data-cursor-label="Alerts"
       onClick={() => { const n = !on; setOn(n); if (n) window.open(SOCIAL.whatsapp.split("?")[0] + "?text=" + encodeURIComponent("Hi Avenoir, please notify me about new arrivals"), "_blank"); }}
       aria-pressed={on}
       className={`cursor-target flex min-h-[44px] items-center gap-3 rounded-full border px-4 text-sm uppercase tracking-widest transition ${on ? "bell-on border-gold bg-gold text-black" : "border-gold/50 text-gold"}`}

@@ -8,7 +8,7 @@ export default function OrderBox() {
   return (
     <section aria-label="How to order" className="mx-auto mt-3 w-full max-w-6xl px-4 sm:px-6">
       <div className="rounded-2xl border border-gold/40 bg-card/80 p-4 sm:p-5">
-        <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between text-left md:pointer-events-none" aria-expanded={open}>
+        <button data-cursor-label="Steps" onClick={() => setOpen(!open)} className="flex w-full items-center justify-between text-left md:pointer-events-none" aria-expanded={open}>
           <span className="font-display text-xl text-gold sm:text-2xl">How to order</span>
           <span className="text-xs uppercase tracking-widest text-muted-foreground md:hidden">{open ? "Hide −" : "5 easy steps +"}</span>
         </button>
@@ -21,7 +21,7 @@ export default function OrderBox() {
           </ol>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <SocialButtons solid />
-            <Link href="/how-to-order/" className="cursor-target text-sm uppercase tracking-widest text-gold underline-offset-4 hover:underline">Full guide →</Link>
+            <Link href="/how-to-order/" data-cursor-label="Guide" className="cursor-target text-sm uppercase tracking-widest text-gold underline-offset-4 hover:underline">Full guide →</Link>
           </div>
         </div>
       </div>

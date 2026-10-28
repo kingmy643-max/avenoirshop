@@ -4,7 +4,7 @@ export default function SocialButtons({ solid = false, className = "" }: { solid
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {items.map(([n, h], i) => (
-        <a key={n} href={h} target="_blank" rel="noopener noreferrer" className={`btn cursor-target ${solid && i === 0 ? "btn-solid" : ""}`}>{n}</a>
+        <a key={n} href={h} target="_blank" rel="noopener noreferrer" data-cursor-label={n} className={`btn cursor-target ${solid && i === 0 ? "btn-solid" : ""}`}>{n}</a>
       ))}
     </div>
   );

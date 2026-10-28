@@ -8,7 +8,7 @@ import { useEffect } from "react";
  *
  *  - shown once per browser session (sessionStorage)
  *  - tap / click / Esc / Enter / Space skips it
- *  - fires "avn:splash-done" when the star starts opening, so the hero logo can start animating
+ *  - fires "avn:splash-done" when the splash starts to fade, so the hero logo can start animating
  *  - a timeout guarantees it can never get stuck on screen
  */
 const SEEN_KEY = "avn_splash";
@@ -36,7 +36,7 @@ export default function SplashControl() {
 
     const ownEvent = (e: AnimationEvent) => e.target === el; // ignore events bubbling up from the logo layers
     const onStart = (e: AnimationEvent) => {
-      if (ownEvent(e) && (e.animationName === "splash-open" || e.animationName === "splash-out")) announce();
+      if (ownEvent(e) && e.animationName === "splash-out") announce();
     };
     const onEnd = (e: AnimationEvent) => {
       if (ownEvent(e) && (e.animationName === "splash-out" || e.animationName === "splash-skip")) finish();
@@ -50,7 +50,7 @@ export default function SplashControl() {
     el.addEventListener("animationend", onEnd);
     el.addEventListener("click", skip);
     window.addEventListener("keydown", onKey);
-    const failsafe = window.setTimeout(finish, 5000);
+    const failsafe = window.setTimeout(finish, 8000);
 
     return () => {
       window.clearTimeout(failsafe);

@@ -1,15 +1,11 @@
 import Link from "next/link";
 import HeroLogo from "@/components/Hero";
-import TechText from "@/components/TechText";
 import BrandFolders from "@/components/BrandFolders";
 import WhyStack from "@/components/WhyStack";
 import AskOrb from "@/components/AskOrb";
 import Gallery from "@/components/Gallery";
 import SocialButtons from "@/components/SocialButtons";
-import { BRANDS, TOTAL_BAGS } from "@/data/site";
 import photos from "@/data/photos.json";
-
-const stats = [[TOTAL_BAGS.toLocaleString("en-US"), "Handbags"], [String(BRANDS.length), "Designer brands"], ["22", "Accessories"], ["FedEx", "Worldwide tracked"]];
 
 export default function Home() {
   return (
@@ -21,16 +17,6 @@ export default function Home() {
         <h1 className="mx-auto mt-6 max-w-2xl text-4xl leading-tight sm:text-6xl">Luxury bags, delivered to your door.</h1>
         <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">Explore 20 designer brands here, then order directly on Instagram, TikTok or WhatsApp. Worldwide delivery with FedEx tracking.</p>
         <SocialButtons solid className="mt-7 justify-center" />
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="gold-line" />
-        <dl className="grid grid-cols-2 gap-6 py-8 text-center sm:grid-cols-4">
-          {stats.map(([n, l]) => (
-            <div key={l} className="reveal"><dt className="font-display text-4xl sm:text-5xl"><TechText>{n}</TechText></dt><dd className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">{l}</dd></div>
-          ))}
-        </dl>
-        <div className="gold-line" />
       </section>
 
       <section className="mx-auto mt-16 max-w-6xl px-4 sm:px-6">

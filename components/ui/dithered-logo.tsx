@@ -262,6 +262,7 @@ const initParticles = (
   dotScale: number,
   originX: number,
   originY: number,
+  coverage?: Float32Array, // optional per-dot opacity (0..1) -> smooth anti-aliased edges
 ): ParticleSystem => {
   const count = points.length / 2;
   const baseX = new Float32Array(count);
@@ -274,7 +275,7 @@ const initParticles = (
   for (let i = 0; i < count; i++) {
     baseX[i] = originX + points[i * 2]! * scaleFactor;
     baseY[i] = originY + points[i * 2 + 1]! * scaleFactor;
-    brightness[i] = 1;
+    brightness[i] = coverage ? coverage[i]! : 1;
     tint[i] = 1;
   }
 
@@ -374,6 +375,7 @@ const drawParticles = (
   const size = sys.size * dpr;
   const pad = 0.25 * dpr;
   const padSize = 0.5 * dpr;
+  const fine = size < 4 * dpr; // dots smaller than ~4 CSS px
 
   for (let z = 0; z < 126; z++) {
     const ids = buckets[z]!;
@@ -386,7 +388,14 @@ const drawParticles = (
       const i = ids[j]!;
       const rx = (sys.baseX[i]! + sys.offsetX[i]!) * dpr;
       const ry = (sys.baseY[i]! + sys.offsetY[i]!) * dpr;
-      ctx.fillRect(rx - pad, ry - pad, size + padSize, size + padSize);
+      if (fine) {
+        // Fine grid: snap each dot to whole device pixels so neighbours tile exactly (no seams, no blur).
+        const x0 = Math.round(rx);
+        const y0 = Math.round(ry);
+        ctx.fillRect(x0, y0, Math.max(1, Math.round(rx + size) - x0), Math.max(1, Math.round(ry + size) - y0));
+      } else {
+        ctx.fillRect(rx - pad, ry - pad, size + padSize, size + padSize);
+      }
     }
   }
 
@@ -516,12 +525,19 @@ export function DitheredLogo({
         const { width: gridW, height: gridH } = processed;
 
         let positions: Float32Array;
+        let coverage: Float32Array | undefined;
         if (solid) {
+          // One dot per covered cell; edge cells keep their partial coverage as opacity.
           const pts: number[] = [];
-          for (let y = 0; y < gridH; y++)
-            for (let x = 0; x < gridW; x++)
-              if (processed.alpha[y * gridW + x]! >= 128) pts.push(x, y);
+          const cov: number[] = [];
+          for (let y = 0; y < gridH; y++) {
+            for (let x = 0; x < gridW; x++) {
+              const a = processed.alpha[y * gridW + x]!;
+              if (a >= 20) { pts.push(x, y); cov.push(a / 255); }
+            }
+          }
           positions = new Float32Array(pts);
+          coverage = new Float32Array(cov);
         } else {
           positions = errorDiffusionDither(
             processed.grayscale,
@@ -556,6 +572,7 @@ export function DitheredLogo({
           responsiveDotScale,
           originX,
           originY,
+          coverage,
         );
         startLoop();
       } catch (error) {

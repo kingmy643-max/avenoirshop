@@ -23,7 +23,7 @@ export default function Brands() {
             <FlipCard
               key={b.slug}
               front={<div className="relative flex h-full flex-col items-center justify-center p-3 text-center">{img && <img src={img} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />}<span className="relative font-logo text-5xl text-gold">{b.name[0]}</span><span className="relative mt-3 font-display text-xl leading-tight sm:text-2xl">{b.name}</span><span className="relative mt-1 text-xs uppercase tracking-widest text-muted-foreground">{b.count} styles</span></div>}
-              back={<div className="flex h-full flex-col items-center justify-center gap-3 p-3 text-center"><span className="font-display text-xl text-gold">{b.name}</span><span className="text-xs text-foreground/80">{b.types.join(" · ")}</span><a href={driveFor(b.slug)} target="_blank" rel="noopener noreferrer" className="btn btn-solid cursor-target !min-h-[40px] !px-4 !text-xs">Open catalog ↗</a></div>}
+              back={<div className="flex h-full flex-col items-center justify-center gap-3 p-3 text-center"><span className="font-display text-xl text-gold">{b.name}</span><span className="text-xs text-foreground/80">{b.types.join(" · ")}</span><a data-cursor-label="Open" href={driveFor(b.slug)} target="_blank" rel="noopener noreferrer" className="btn btn-solid cursor-target !min-h-[40px] !px-4 !text-xs">Open catalog ↗</a></div>}
             />
           );
         })}
